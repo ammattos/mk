@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>A Extensão Digital do seu Dojo - Proposta Comercial</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&family=Shippori+Mincho+B1:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+    :root {
+        --bg: #FDFCF8; 
+        --ink: #181818; 
+        --mut: #595550; 
+        --acc: #9E2A22; /* Vermelho principal para páginas claras */
+        --line: #DCD8CF; 
+        --f-display: 'Shippori Mincho B1', serif;
+        --f-text: 'Manrope', sans-serif;
+    }
+    
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    
+    html, body {
+        background-color: var(--bg);
+        color: var(--ink);
+        font-family: var(--f-text);
+        line-height: 1.5;
+        -webkit-font-smoothing: antialiased;
+    }
+
+    .page {
+        width: 297mm; 
+        height: 209mm; 
+        padding: 12mm 20mm;
+        margin: 0 auto;
+        background: var(--bg);
+        position: relative;
+        overflow: hidden;
+        page-break-after: always;
+        page-break-inside: avoid;
+    }
+
+    /* DARK THEME - O vermelho é substituído por um creme minimalista para luxo visual */
+    .page.dark-theme { 
+        --acc: #DCD8CF; /* Tom minimalista Bege/Creme (Areia) */
+        background-color: var(--ink); 
+        color: #FDFCF8; 
+    }
+    .page.dark-theme h1, .page.dark-theme h2 { color: #FFFFFF; }
+    .page.dark-theme p, .page.dark-theme li { color: #CCCCCC; }
+    .page.dark-theme strong { color: #FFFFFF; }
+
+    /* Força o círculo principal a permanecer vermelho */
+    .page.dark-theme .red-dot {
+        background-color: #9E2A22 !important;
+    }
+
+    /* Tipografia High-End */
+    h1, h2, h3 { font-family: var(--f-display); font-weight: 700; }
+    h1 { font-size: 52px; line-height: 1.05; margin-bottom: 12px; color: var(--ink); letter-spacing: -1px;}
+    h2 { font-size: 38px; line-height: 1.15; margin-bottom: 16px; color: var(--ink); letter-spacing: -0.5px;}
+    h3 { font-size: 15px; margin-bottom: 8px; color: var(--acc); font-weight: 700; letter-spacing: 2px; text-transform: uppercase; font-family: var(--f-text);}
+    
+    p { font-size: 14px; margin-bottom: 14px; color: var(--mut); font-weight: 400; z-index: 10; position: relative;}
+    strong { color: var(--ink); font-weight: 700; }
+    
+    ul { list-style: none; margin-bottom: 16px; position: relative; z-index: 10;}
+    li { font-size: 14px; color: var(--mut); margin-bottom: 10px; position: relative; padding-left: 16px; }
+
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 15mm; align-items: center; height: 100%; position: relative; z-index: 5;}
+    
+    .red-dot {
+        width: 14px; height: 14px; background-color: var(--acc);
+        border-radius: 50%; margin-bottom: 16px;
+    }
+
+    /* Kanjis Background */
+    .kanji-bg {
+        position: absolute;
+        font-family: var(--f-display);
+        font-size: 160px;
+        color: rgba(0,0,0,0.025);
+        z-index: 1;
+        writing-mode: vertical-rl;
+        text-orientation: upright;
+        letter-spacing: 0px;
+        top: -35mm;
+    }
+    .page.dark-theme .kanji-bg { color: rgba(255,255,255,0.015); }
+    .kanji-left { left: -10mm; }
+    .kanji-right { right: 10mm; left: auto; }
+
+    /* Mockups Style */
+    .mockup-container { display: flex; justify-content: center; position: relative; gap: 6mm; perspective: 1000px;}
+    
+    .mockup-frame {
+        border-radius: 28px;
+        box-shadow: 0 20px 40px rgba(0,0,0,0.12), 0 5px 15px rgba(0,0,0,0.05);
+        border: 3.5px solid #141414;
+        background-color: #000;
+        overflow: hidden;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 5;
+    }
+    .page.dark-theme .mockup-frame { border-color: #222; box-shadow: 0 30px 60px rgba(0,0,0,0.6); }
+
+    .mockup-img {
+        max-width: 100%;
+        max-height: 125mm;
+        width: auto;
+        height: auto;
+        object-fit: contain;
+        display: block;
+    }
+
+    /* FAQ Section */
+    .faq-list { display: flex; flex-direction: column; gap: 3.5mm; margin-top: 2mm; max-width: 950px; z-index: 10; position: relative;}
+    .faq-item { border-top: 1px solid var(--line); padding-top: 2.5mm; }
+    .faq-item:first-child { border-top: 1px solid var(--ink); }
+    .faq-item h4 { font-family: var(--f-text); font-size: 14px; font-weight: 700; color: var(--ink); margin-bottom: 2px;}
+    .faq-item p { font-size: 12.5px; color: var(--mut); margin-bottom: 0; line-height: 1.45;}
+
+    /* Pricing Table - Base */
+    .pricing-header h3 { color: var(--acc); letter-spacing: 2px; margin-bottom: 4px; font-size: 14px;}
+    .pricing-header h2 { font-size: 34px; font-weight: 500;}
+    
+    .pricing-table { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12mm; margin-top: 6mm; }
+    .pricing-col { border-top: 1px solid var(--ink); padding-top: 6mm; position: relative; display: flex; flex-direction: column;}
+    .pricing-col.recommended { border-top: 2px solid var(--acc); }
+    
+    .pricing-col h4 { font-family: var(--f-text); font-size: 15px; font-weight: 700; color: var(--ink); margin-bottom: 4px;}
+    .pricing-col .desc { font-size: 12px; color: var(--mut); margin-bottom: 16px; min-height: 40px; line-height: 1.4;}
+    
+    .pricing-col .price { font-family: var(--f-display); font-size: 28px; color: var(--ink); font-weight: 500; margin-bottom: 4px;}
+    .pricing-col .price-sub { font-size: 11px; color: var(--mut); margin-bottom: 16px;}
+    
+    .pricing-col .details-title { font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; color: var(--ink); margin-bottom: 6px; border-top: 1px solid var(--line); padding-top: 12px; margin-top: auto;}
+    .pricing-col .details-text { font-size: 11.5px; color: var(--mut); font-weight: 500; text-transform: none; letter-spacing: 0px; line-height: 1.4;}
+
+    .footer-stamp { position: absolute; bottom: 10mm; left: 20mm; font-size: 10px; color: var(--mut); letter-spacing: 2px; text-transform: uppercase; font-weight: 600; z-index: 20;}
+    .page.dark-theme .footer-stamp { color: #666; }
+
+    /* Estilos Específicos para Pricing em Dark Theme */
+    .page.dark-theme .pricing-col { border-top-color: #333; }
+    .page.dark-theme .pricing-col.recommended { border-top-color: var(--acc); }
+    .page.dark-theme .pricing-header h2, .page.dark-theme .pricing-col h4, .page.dark-theme .price { color: #FFF; }
+    .page.dark-theme .details-title { color: #FFF; border-top-color: #333; }
+    .page.dark-theme .details-text { color: #AAA; }
+    .page.dark-theme .jita-kyoei-box { background-color: rgba(255,255,255,0.03) !important; }
+    .page.dark-theme .jita-kyoei-box h5 { color: var(--acc) !important; }
+    .page.dark-theme .jita-kyoei-box p { color: #CCC !important; }
+    .page.dark-theme .contact-block { border-top-color: #333 !important; }
+    .page.dark-theme .contact-block p { color: #CCC; }
+    .page.dark-theme .contact-block p.title, .page.dark-theme .contact-block p.email { color: #FFF; }
+
+    @media print {
+        html, body { background-color: white; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+        .page { width: 297mm !important; height: 209mm !important; max-height: 209mm !important; box-shadow: none; margin: 0 !important; padding: 12mm 20mm !important; page-break-after: always !important; page-break-inside: avoid !important; }
+        @page { size: A4 landscape; margin: 0; }
+    }
+</style>
+</head>
+<body>
+
+<!-- PÁGINA 1: CAPA (Branca) - COM KANJI -->
+<div class="page">
+    <div class="kanji-bg kanji-left">真剣柔道</div>
+    <div class="grid-2">
+        <div style="padding-top: 2mm; padding-right: 5mm;">
+            <h1>A Extensão Digital<br>do Seu Dojo</h1>
+            <h3 style="margin-bottom: 24px;">O Rito de Entrada (Rei)</h3>
+            
+            <p>O judô não começa com a técnica, começa com a saudação. A experiência do aluno na nossa plataforma inicia-se com o mesmo rigor. <strong> Essa não é uma solução genérica; é a extensão do seu dojo.</strong></p>
+            <p>Nascido no tatami, este projeto mapeia a jornada do aluno para compreender a evasão e elevar o valor da sua academia. O sistema chega ao judoca com as suas cores, a sua marca e a sua carta de boas-vindas, criando um ambiente de exclusividade e disciplina.</p>
+            
+            <p style="margin-top: 35px; font-size: 12px; font-weight: 800; color: var(--acc); letter-spacing: 1.5px; text-transform: uppercase; line-height: 1.4;">
+                MIRELA MATTOS <span style="color: var(--ink)">. DESENVOLVEDORA</span><br>
+                <span style="font-size: 9px; font-weight: 600; color: var(--mut); letter-spacing: 0.5px;">BACHAREL EM CIÊNCIAS SOCIAIS (USP) & UX/UI DESIGNER </span>
+            </p>
+        </div>
+        <div class="mockup-container">
+            <div class="mockup-frame" style="transform: translateY(15px);"><img src="1 aluno.jpg" alt="Login" class="mockup-img"></div>
+            <div class="mockup-frame" style="transform: translateY(-5px);"><img src="2 aluno.jpeg" alt="Manifesto" class="mockup-img"></div>
+        </div>
+    </div>
+    <div class="footer-stamp">Confidencial · Apenas para Dojos escolhidos, 2026</div>
+</div>
+
+<!-- PÁGINA 2: A AUTORA E A ESTRATÉGIA DE NEGÓCIO (Preta) - COM KANJI -->
+<div class="page dark-theme">
+    <div class="kanji-bg kanji-right">社会学</div>
+    <div class="grid-2">
+        <!-- Lado Esquerdo: História e Sociologia com Negrito Estratégico -->
+        <div style="padding-right: 5mm; padding-top: 3mm; display: flex; flex-direction: column; justify-content: center; z-index: 10;">
+            <h3 style="color: var(--acc);">A Visão Estratégica</h3>
+            <h2 style="font-size: 32px; margin-bottom: 14px; line-height: 1.1;">Engenharia Comportamental<br><span style="font-size: 18px; font-weight: 400; color: #AAA; font-family: var(--f-text);">por Mirela Mattos</span></h2>
+            
+            <p style="font-size: 13px; margin-bottom: 10px; line-height: 1.45;"> Como judoca, UX/UI Designer e pesquisadora da Universidade de São Paulo (com formatura antecipada por mérito e uma mente analítica forjada por um diagnóstico de superdotação), direcionei o meu foco para resolver a dor silenciosa e mais letal do nosso esporte: <strong>a evasão invisível</strong>.</p>
+            
+            <p style="font-size: 13px; margin-bottom: 0; line-height: 1.45;">O sensei Jigoro Kano, ao exportar o judô para o Ocidente, criou as faixas coloridas com uma precisão sociológica ímpar: <strong>os ocidentais precisam tangibilizar o seu próprio avanço</strong>. Mas hoje, num mundo cada vez mais acelerado, o intervalo entre os exames gera um vácuo informacional. O judô exige paciência, mas a mente contemporânea exige um mapa claro e gameficado. <strong>É esta exata lacuna que a nossa tecnologia preenche.</strong></p>
+        </div>
+        
+        <!-- Lado Direito: ROI e Ganhos Diretos para o Dojo -->
+        <div style="padding-left: 5mm; display: flex; flex-direction: column; justify-content: center; height: 100%;">
+            
+            <div style="border-left: 1px solid rgba(255,255,255,0.15); padding-left: 20px; display: flex; flex-direction: column; gap: 16px; margin-bottom: 16px;">
+                <div style="position: relative;">
+                    <!-- A sombra da bolinha agora também usa o tom Creme (rgba(220, 216, 207, 0.15)) para harmonizar no dark theme -->
+                    <div style="position: absolute; left: -25px; top: 6px; width: 9px; height: 9px; background: var(--acc); border-radius: 50%; box-shadow: 0 0 0 4px rgba(220, 216, 207, 0.15);"></div>
+                    <h4 style="font-family: var(--f-display); font-size: 18px; color: #FFF; margin-bottom: 2px;">1. Retenção Ativa e Visível</h4>
+                    <p style="font-size: 12px; color: #AAA; margin: 0; line-height: 1.4;">Ao unir a frequência de treinos, as técnicas (Waza) e os requisitos da CBJ num mapa diário, <strong>o aluno não abandona o que vê crescer</strong>.</p>
+                </div>
+                <div style="position: relative;">
+                    <div style="position: absolute; left: -24px; top: 6px; width: 7px; height: 7px; background: #666; border-radius: 50%;"></div>
+                    <h4 style="font-family: var(--f-display); font-size: 18px; color: #FFF; margin-bottom: 2px;">2. Aumento do Valor Percebido</h4>
+                    <p style="font-size: 12px; color: #AAA; margin: 0; line-height: 1.4;">Uma interface premium, com acervo histórico e flashcards, entrega um ecossistema que <strong>justifica mensalidades de alto padrão</strong>.</p>
+                </div>
+                <div style="position: relative;">
+                    <div style="position: absolute; left: -24px; top: 6px; width: 7px; height: 7px; background: #666; border-radius: 50%;"></div>
+                    <h4 style="font-family: var(--f-display); font-size: 18px; color: #FFF; margin-bottom: 2px;">3. Governança Silenciosa</h4>
+                    <p style="font-size: 12px; color: #AAA; margin: 0; line-height: 1.4;">A tecnologia trabalha pelo Dojo. <strong>O aluno registra, o sistema organiza e o Sensei apenas supervisiona.</strong></p>
+                </div>
+            </div>
+
+            <!-- Box de Destaque do ROI (Modo Escuro Creme) -->
+            <div style="border-left: 3px solid var(--acc); background: rgba(255,255,255,0.04); padding: 10px 14px; border-radius: 0 6px 6px 0; margin-bottom: 12px;">
+                <p style="margin: 0; font-size: 12px; color: #E0DCD3; line-height: 1.45;"><strong>O Retorno sobre Investimento (ROI)</strong><br>
+                A lógica comercial é implacável: blindar a sua academia contra a evasão de apenas dois alunos já <strong>financia mensalmente a ferramenta</strong>. O restante é lucro líquido mensal e prestígio de marca.</p>
+            </div>
+            
+            <p style="font-size: 11.5px; margin: 0; color: #AAA; line-height: 1.4;"><strong>Alianças Selecionadas a Dedo:</strong> A adoção ocorre estritamente por convite, garantindo uma rede de Dojos que preservam a verdadeira cultura do Judô.</p>
+        </div>
+    </div>
+    <div class="footer-stamp">Consultoria e Engenharia Comportamental</div>
+</div>
+
+<!-- PÁGINA 3: MICHI - A JORNADA (Preta) - COM KANJI -->
+<div class="page dark-theme">
+    <div class="kanji-bg kanji-left">真剣柔道</div>
+    <div class="grid-2">
+        <div class="mockup-container" style="justify-content: center; align-items: center;">
+            <div class="mockup-frame" style="transform: translateY(5px);"><img src="3 aluno.jpg" alt="Michi - Rumo à Preta" class="mockup-img"></div>
+        </div>
+        <div style="padding-right: 15mm;">
+            <h3 style="color: var(--acc);">Michi (O Caminho)</h3>
+            <h2>Tangibilizar o Progresso</h2>
+            <p>A evasão no judô raramente ocorre porque o treino é duro. Ela acontece quando a evolução do atleta se torna invisível.</p>
+            <p>O módulo <strong>Michi</strong> mapeia com exatidão as exigências oficiais da CBJ para a próxima faixa. O aluno acompanha visualmente os requisitos concluídos, transformando a ansiedade pré-exame em foco inabalável.</p>
+            <p>Ao tangibilizar o progresso, o aluno constrói um histórico do qual se orgulha e mostra aos amigos e familiares com facilidade. O sentimento de pertencimento a este caminho blinda a sua academia contra desistências.</p>
+        </div>
+    </div>
+    <div class="footer-stamp">Estudo Comportamental & Identidade</div>
+</div>
+
+<!-- PÁGINA 4: CONSTÂNCIA E REGRAS OFICIAIS (Branca) - SEM KANJI -->
+<div class="page">
+    <div class="grid-2">
+        <div style="padding-right: 5mm;">
+            <h3>Keiko (Treino)</h3>
+            <h2>A Disciplina</h2>
+            <p>O suor agora tem representação visual. O calendário regista a assiduidade e premia a consistência em dias seguidos no tatami.</p>
+            <p>Ao lado do mapa que acompanha a conquista de cada faixa (por diretrizes da CBJ), o judoca compreende que a evolução exige tempo, respeito e paciência. O aplicativo educa o aluno a respeitar a jornada, alinhando as expetativas com a realidade rigorosa das graduações.</p>
+            <p><strong>A consequência:</strong> O aluno recusa-se a abandonar a trilha de conhecimento construída. O capital cultural acumula-se.</p>
+        </div>
+        <div class="mockup-container">
+            <div class="mockup-frame" style="transform: translateY(-10px);"><img src="5 aluno.jpg" alt="Mapa Yudansha" class="mockup-img"></div>
+            <div class="mockup-frame" style="transform: translateY(15px);"><img src="6 aluno.jpg" alt="Calendário" class="mockup-img"></div>
+        </div>
+    </div>
+    <div class="footer-stamp">Retenção Através da Constância</div>
+</div>
+
+<!-- PÁGINA 5: O ESTUDO E A AUTORIDADE (Preta) - COM KANJI -->
+<div class="page dark-theme">
+    <div class="kanji-bg kanji-right">真剣柔道</div>
+    <div class="grid-2">
+        <div class="mockup-container">
+            <div class="mockup-frame"><img src="8 aluno.jpg" alt="Capítulos" class="mockup-img"></div>
+            <div class="mockup-frame" style="transform: translateY(20px);"><img src="9 aluno.jpg" alt="Jigoro Kano" class="mockup-img"></div>
+        </div>
+        <div style="padding-right: 10mm; padding-left: 5mm;">
+            <div class="red-dot"></div>
+            <h2>O Dojo como Centro<br>de Excelência</h2>
+            <p>O valor de uma mensalidade de alto padrão justifica-se quando a academia não é apenas um local de prática física, mas uma escola formadora de cultura, caráter e respeito.</p>
+            <p>O módulo <strong>Gaku</strong> traz as raízes do Judô para a vida do aluno. Da biografia de Jigoro Kano à compreensão do <em>Seiryoku Zen'yo</em> (Melhor uso da energia), a plataforma consolida todo o patrimônio cultural do esporte.</p>
+            <p>O Sensei ensina no tatami; o aplicativo reforça na mente do aluno, onde quer que ele esteja.</p>
+        </div>
+    </div>
+    <div class="footer-stamp">Capital Cultural & Legado</div>
+</div>
+
+<!-- PÁGINA 6: FOCO TÉCNICO - WAZA (Branca) - SEM KANJI -->
+<div class="page">
+    <div class="grid-2">
+        <div style="padding-right: 5mm;">
+            <h3>Waza (Técnica)</h3>
+            <h2>A Mecânica Perfeita:<br>Kuzushi, Tsukuri, Kake</h2>
+            <p>Compreender os golpes é tão vital quanto executá-los. O módulo <strong>Waza</strong> decompõe as 40 projeções do Gokyo com clareza clínica, além das técnicas extra Gokyo e dos quatro Katas.</p>
+            <p>Os alunos podem estudar a transição correta do desequilíbrio (<em>Kuzushi</em>) à execução (<em>Kake</em>), revendo mentalmente as orientações passadas no treino ou acessando os vídeos oficiais no canal da Kodokan via botão interativo com conexão direta.</p>
+            <p>Este nível de polimento técnico eleva o rigor da sua academia e agiliza a curva de aprendizagem, permitindo que as aulas físicas fluam com máxima eficiência.</p>
+        </div>
+        <div class="mockup-container">
+            <div class="mockup-frame" style="transform: translateY(15px);"><img src="12 aluno.jpg" alt="Waza Lista" class="mockup-img"></div>
+            <div class="mockup-frame" style="transform: translateY(-5px);"><img src="13 aluno.jpg" alt="Waza Detalhe" class="mockup-img"></div>
+        </div>
+    </div>
+    <div class="footer-stamp">Rigidez Técnica e Polimento</div>
+</div>
+
+<!-- PÁGINA 7: DESENVOLVIMENTO LINGUÍSTICO (Preta) - COM KANJI -->
+<div class="page dark-theme">
+    <div class="kanji-bg kanji-left">真剣柔道</div>
+    <div class="grid-2">
+        <div class="mockup-container">
+            <div class="mockup-frame" style="transform: translateY(-10px);"><img src="10 aluno.jpeg" alt="Flashcards" class="mockup-img"></div>
+            <div class="mockup-frame" style="transform: translateY(15px);"><img src="11 aluno.jpeg" alt="Estudo Flashcard" class="mockup-img"></div>
+        </div>
+        <div style="padding-left: 10mm;">
+            <div class="red-dot"></div>
+            <h2>O idioma<br>do Respeito</h2>
+            <p>O judoca contemporâneo por vezes afasta-se da terminologia original. Para resgatar termos cruciais (como <em>Osaekomi, Shime-waza, Randori</em>), implementámos Flashcards Interativos.</p>
+            <p>O estudo linguístico torna-se imersivo. No círculo de amigos e familiares, a admiração surge pela domínio de um segundo idioma. A oferta de ensino bilíngue é um diferencial competitivo cada vez mais buscado pelos pais.</p>
+            <p>A retenção deste vocabulário gera confiança no aluno para os exames de graduação e perpetua o respeito absoluto às tradições japonesas dentro e fora do seu dojo.</p>
+        </div>
+    </div>
+    <div class="footer-stamp">Tradição & Engajamento Intelectual</div>
+</div>
+
+<!-- PÁGINA 8: FOCO NO DESEMPENHO - KIROKU (Branca) - SEM KANJI -->
+<div class="page">
+    <div class="grid-2">
+        <div style="padding-right: 5mm;">
+            <h3>Kiroku (Registro)</h3>
+            <h2>O Espelho do Atleta</h2>
+            <p>O módulo <strong>Kiroku</strong> atua como o painel de desempenho pessoal do judoca. Através de gráficos limpos e intuitivos, o aluno avalia o seu engajamento mensal e compreende o ritmo da sua evolução.</p>
+            <p>Ao fornecer ao praticante as suas próprias métricas de esforço e frequência, eliminamos o sentimento de estagnação.</p>
+            <p>Quando o aluno consegue visualizar o seu desempenho, o compromisso com o Dojo fortalece-se. A ansiedade e a desmotivação diminuem, o foco conquista espaço.</p>
+        </div>
+        <div class="mockup-container">
+            <div class="mockup-frame" style="transform: translateY(10px);"><img src="14 aluno.jpg" alt="Kiroku Dash" class="mockup-img"></div>
+            <div class="mockup-frame" style="transform: translateY(-10px);"><img src="15 aluno.jpg" alt="Kiroku Graficos" class="mockup-img"></div>
+        </div>
+    </div>
+    <div class="footer-stamp">Métricas Pessoais & Autonomia</div>
+</div>
+
+<!-- PÁGINA 9: A VISÃO DO SENSEI (Preta) - COM KANJI -->
+<div class="page dark-theme">
+    <div class="kanji-bg kanji-right">真剣柔道</div>
+    <div class="grid-2">
+        <div class="mockup-container">
+            <div class="mockup-frame" style="transform: translateY(-5px);"><img src="1 sensei.jpg" alt="Painel Sensei" class="mockup-img"></div>
+            <div class="mockup-frame" style="transform: translateY(20px);"><img src="7 sensei.jpg" alt="Painel Detalhe Sensei" class="mockup-img"></div>
+        </div>
+        <div style="padding-left: 5mm;">
+            <div class="red-dot"></div>
+            <h2>O Aluno Registra,<br>O Sensei Governa</h2>
+            <p>A tecnologia, para ser útil, deve ser silenciosa. O próprio aluno insere a sua frequência e estuda os requisitos, libertando o Sensei da burocracia das planilhas de papel.</p>
+            <p>Para si, como gestor, o sistema entrega Visão Centralizada e Inteligência de Negócio: Monitorize em tempo real a assiduidade das turmas, o seu progresso e os principais pontos de refinamento durante os treinos.</p>
+            <p>Saiba exatamente quem está pronto para a próxima faixa e, de forma vital, quem está em risco de evasão e precisa de acolhimento.</p>
+        </div>
+    </div>
+    <div class="footer-stamp">Governança · Inteligência de Negócio</div>
+</div>
+
+<!-- PÁGINA 10: FAQ (Branca) - COM KANJI -->
+<div class="page" style="display: flex; flex-direction: column; padding-top: 25mm;">
+    <div class="kanji-bg kanji-left">真剣柔道</div>
+    <div style="margin-bottom: 16px; position: relative; z-index: 10;">
+        <h3>O Tatami Seguro</h3>
+        <h2>Respostas para a sua Decisão</h2>
+    </div>
+    
+    <div class="faq-list">
+        <div class="faq-item">
+            <h4>Os alunos pagam alguma taxa extra para usar o aplicativo?</h4>
+            <p>Não. O aplicativo é um diferencial do seu Dojo. Ao oferecê-lo sem custo aos alunos, você eleva naturalmente o valor percebido e a justificativa da sua mensalidade.</p>
+        </div>
+        <div class="faq-item">
+            <h4>O sistema é complexo para o Sensei gerenciar?</h4>
+            <p>A experiência prioriza a autonomia do aluno, que registra seus próprios treinos. Para o Sensei, o painel é puramente visual e voltado para acompanhamento e aprovações simples.</p>
+        </div>
+        <div class="faq-item">
+            <h4>Como o aplicativo é introduzido aos alunos na academia?</h4>
+            <p>Fornecemos orientações estratégicas de lançamento. O objetivo é apresentar o sistema como um novo benefício exclusivo do seu Dojo, garantindo adesão orgânica desde o primeiro dia.</p>
+        </div>
+        <div class="faq-item">
+            <h4>Posso adicionar o conteúdo da minha linhagem?</h4>
+            <p>Sim. Além do currículo oficial da CBJ, o aplicativo permite integrar o seu conhecimento específico, transformando-se num material de apoio fiel à tradição da sua academia.</p>
+        </div>
+        <div class="faq-item">
+            <h4>Como funciona a privacidade de dados dos alunos (LGPD)?</h4>
+            <p>Adotamos protocolos rígidos de armazenamento. Os dados de menores e o histórico de graduações são mantidos com total sigilo, respeitando a privacidade que a sua instituição exige.</p>
+        </div>
+        <div class="faq-item">
+            <h4>Como posso avaliar se faz sentido para o meu Dojo?</h4>
+            <p>Iniciamos a parceria através de um diagnóstico conjunto. Se o seu Dojo tiver o perfil adequado, testamos a usabilidade e a adaptação antes de firmarmos uma aliança de longo prazo.</p>
+        </div>
+    </div>
+    
+    <div class="footer-stamp">Transparência & Governança</div>
+</div>
+
+<!-- PÁGINA 11: PRICING E FECHAMENTO (Preta) - COM KANJI -->
+<div class="page dark-theme" style="display: flex; flex-direction: column; padding-top: 25mm;">
+    <div class="kanji-bg kanji-right">真剣柔道</div>
+    <div class="pricing-header" style="position: relative; z-index: 10;">
+        <h3>Alianças Estratégicas</h3>
+        <h2>Investimento no Patrimônio do Dojo</h2>
+    </div>
+
+    <div class="pricing-table" style="position: relative; z-index: 10;">
+        <!-- SAAS -->
+        <div class="pricing-col">
+            <h4>Licenciamento</h4>
+            <p class="desc">Para Dojos em fase de expansão que buscam adoção tecnológica com custos iniciais mais acessíveis.</p>
+            
+            <div class="price">R$ 590 p/ mês</div>
+            <div class="price-sub">Até 60 alunos (R$ 890 até 120); + sob consulta</div>
+            
+            <div class="details-title">IMPLANTAÇÃO: R$ 6.800 (ÚNICO)</div>
+            <div class="details-text">
+                Custa menos de R$ 10 por aluno/mês. A retenção de apenas 2 alunos já justifica o valor da ferramenta.
+            </div>
+        </div>
+
+        <!-- HÍBRIDO -->
+        <div class="pricing-col recommended">
+            <h4 style="color: var(--acc);">Modelo Híbrido</h4>
+            <p class="desc">A maior rentabilidade a longo prazo. Mensalidade com garantia de suporte técnico contínuo.</p>
+            
+            <div class="price" style="color: var(--acc);">R$ 290 p/ mês</div>
+            <div class="price-sub">Até 60 alunos (R$ 490 até 120); + sob consulta</div>
+            
+            <div class="details-title">IMPLANTAÇÃO: R$ 12.800 (ÚNICO)</div>
+            <div class="details-text">
+                A escolha Estratégica para academias consolidadas. A economia na mensalidade amortiza o investimento.
+            </div>
+        </div>
+
+        <!-- KEY IN HAND -->
+        <div class="pricing-col">
+            <h4>Key in Hand (Proprietária)</h4>
+            <p class="desc">Para federações ou franquias que requerem total independência e tratamento exclusivo.</p>
+            
+            <div class="price">R$ 0 p/ mês</div>
+            <div class="price-sub">Independente do número de alunos</div>
+            
+            <div class="details-title">IMPLANTAÇÃO: R$ 22.000 (ÚNICO)</div>
+            <div class="details-text">
+                Transferência do código-fonte para uso próprio, assegurando a sua independência tecnológica.
+            </div>
+        </div>
+    </div>
+    
+    <!-- RODAPÉ UNIFICADO E ELEGANTE -->
+    <div class="contact-block" style="display: grid; grid-template-columns: 1fr 1fr; gap: 15mm; margin-top: auto; margin-bottom: 6mm; align-items: stretch; z-index: 10; position: relative; border-top: 2px solid var(--ink); padding-top: 5mm;">
+        
+        <!-- Bloco de Contato -->
+        <div style="display: flex; flex-direction: column; justify-content: center;">
+            <p class="title" style="font-size: 11px; color: var(--ink); font-weight: 800; text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 6px;">Próximo Passo</p>
+            <p style="font-size: 12px; color: var(--bg); margin-bottom: 8px; line-height: 1.4;">Agende uma conversa e vamos avaliar juntos como a plataforma se encaixa na rotina e cultura da sua academia.</p>
+            <p class="email" style="font-size: 14px; color: var(--bg); font-weight: 800;">mirela.mattos@usp.com.br &nbsp;|&nbsp; (11) 97062-2760</p>
+        </div>
+        
+        <!-- Bloco Jita Kyoei -->
+        <div class="jita-kyoei-box" style="background-color: #F1EFEA; border-radius: 6px; padding: 5mm 8mm; display: flex; flex-direction: column; justify-content: center; text-align: left;">
+            <h5 style="font-family: var(--f-text); font-size: 11px; color: var(--acc); letter-spacing: 1px; margin-bottom: 4px; font-weight: 800;">COMPROMISSO JITA KYOEI (自他共栄)</h5>
+            <p style="font-size: 11.5px; margin: 0; color: var(--mut); line-height: 1.4;">Dojos com forte impacto social ou programas de fomento ao judô inclusivo dispõem de condições comerciais exclusivas para acesso tecnológico.</p>
+        </div>
+        
+    </div>
+    
+    <div class="footer-stamp">Valor Agregado e Visão de Excelência</div>
+</div>
+
+</body>
+</html>
